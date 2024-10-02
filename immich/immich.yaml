@@ -1,5 +1,4 @@
 name: immich
-x-version: &immich_version v1.115.0
 
 services:
   tailscale:
@@ -18,7 +17,7 @@ services:
 
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:*immich_version
+    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION}
     volumes:
     - /opt/immich/data/library:/usr/src/app/upload
     - /etc/localtime:/etc/localtime:ro
@@ -36,7 +35,7 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:*immich_version
+    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION}
     volumes:
     - /opt/immich/data/model-cache:/cache
     restart: unless-stopped
