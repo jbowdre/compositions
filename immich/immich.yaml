@@ -1,4 +1,6 @@
 name: immich
+x-version: &immich_version v1.115.0
+
 services:
   tailscale:
     image: tailscale/tailscale:latest
@@ -16,12 +18,16 @@ services:
 
   immich-server:
     container_name: immich_server
-    image: ghcr.io/immich-app/immich-server:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-server:*immich_version
     volumes:
-    - ${UPLOAD_LOCATION}:/usr/src/app/upload
+    - /opt/immich/data/library:/usr/src/app/upload
     - /etc/localtime:/etc/localtime:ro
-    env_file:
-    - stack.env
+    environment:
+      DB_DATABASE_NAME: ${DB_DATABASE_NAME}
+      DB_HOSTNAME: ${DB_HOSTNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: ${DB_USERNAME}
+      REDIS_HOSTNAME: ${REDIS_HOSTNAME}
     network_mode: service:tailscale
     depends_on:
     - redis
@@ -30,11 +36,9 @@ services:
 
   immich-machine-learning:
     container_name: immich_machine_learning
-    image: ghcr.io/immich-app/immich-machine-learning:${IMMICH_VERSION:-release}
+    image: ghcr.io/immich-app/immich-machine-learning:*immich_version
     volumes:
     - /opt/immich/data/model-cache:/cache
-    env_file:
-    - stack.env
     restart: unless-stopped
 
   redis:
@@ -45,8 +49,6 @@ services:
   database:
     container_name: immich_postgres
     image: docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0
-    env_file:
-    - stack.env
     environment:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_USER: ${DB_USERNAME}
