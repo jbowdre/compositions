@@ -1,0 +1,35 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: linkding-tailscale
+    restart: unless-stopped
+    ports:
+    - 9090:9090
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?err}
+      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
+      TS_STATE_DIR: "/var/lib/tailscale/"
+      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_SERVE_CONFIG: /config/serve-config.json
+    volumes:
+    - /opt/linkding/ts_data:/var/lib/tailscale/
+    - /opt/linkding/serve-config.json:/config/serve-config.json
+
+  linkding:
+    container_name: linkding
+    image: sissbruecker/linkding:latest
+    network_mode: service:tailscale
+    volumes:
+    - /opt/linkding/data:/etc/linkding/data
+    environment:
+      LD_AUTH_PROXY_LOGOUT_URL: ${LD_AUTH_PROXY_LOGOUT_URL:-}
+      LD_AUTH_PROXY_USERNAME_HEADER: ${LD_AUTH_PROXY_USERNAME_HEADER:-}
+      LD_DISABLE_BACKGROUND_TASKS: False
+      LD_DISABLE_URL_VALIDATION: False
+      LD_ENABLE_AUTH_PROXY: ${LD_ENABLE_AUTH_PROXY:-False}
+      LD_FAVICON_PROVIDER: https://favicon.twenty.com/{domain}/32
+      LD_HOST_PORT: 9090
+      LD_LOG_X_FORWARDED_FOR: True
+      LD_SUPERUSER_NAME: ${LD_SUPERUSER_NAME:-admin}
+      LD_SUPERUSER_PASSWORD: ${LD_SUPERUSER_PASSWORD:-}
+    restart: unless-stopped

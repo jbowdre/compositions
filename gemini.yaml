@@ -1,0 +1,15 @@
+services:
+  agate:
+    restart: unless-stopped
+    build: /opt/gemini/
+    container_name: agate
+    volumes:
+    - /opt/gemini/content:/var/agate/content
+    - /opt/gemini/certs:/var/agate/certs
+    ports:
+    - "1965:1965"
+    command: >
+      --content content --certs certs --addr 0.0.0.0:1965
+      --hostname ${HOSTNAME_1}
+      --hostname ${HOSTNAME_2}
+      --lang en-US

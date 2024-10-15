@@ -1,0 +1,12 @@
+services:
+  simplexmq:
+    container_name: simplexmq
+    image: simplexchat/smp-server:v6
+    ports:
+      - "5223:5223"
+    restart: always
+    volumes:
+      - /opt/simplexmq/config:/etc/opt/simplex:z
+      - /opt/simplexmq/logs:/var/opt/simplex:z
+    environment:
+      - addr=${SMP_ADDR}

@@ -1,0 +1,10 @@
+services:
+  vault-unseal:
+    image: ghcr.io/lrstanley/vault-unseal
+    container_name: vault-unseal
+    restart: unless-stopped
+    environment:
+      ALLOW_SINGLE_NODE: true
+      CONFIG_PATH: /etc/vault-unseal.yaml
+    volumes:
+    - /opt/vault-unseal/vault-unseal.yaml:/etc/vault-unseal.yaml

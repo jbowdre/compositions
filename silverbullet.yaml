@@ -1,0 +1,30 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: silverbullet-tailscale
+    restart: unless-stopped
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?err}
+      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
+      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_STATE_DIR: /var/lib/tailscale/
+      TS_SERVE_CONFIG: /config/serve-config.json
+    volumes:
+    - /opt/silverbullet/ts_data:/var/lib/tailscale/
+    - /opt/silverbullet/serve-config.json:/config/serve-config.json
+
+  silverbullet:
+    image: zefhemel/silverbullet
+    container_name: silverbullet
+    restart: unless-stopped
+    environment:
+      SB_USER: "${SB_CREDS}"
+    volumes:
+    - /opt/silverbullet/space:/space
+    network_mode: service:tailscale
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: silverbullet-watchtower
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock

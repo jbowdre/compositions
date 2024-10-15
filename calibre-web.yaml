@@ -1,0 +1,29 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: calibre-tailscale
+    restart: unless-stopped
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?err}
+      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
+      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_STATE_DIR: /var/lib/tailscale/
+      TS_SERVE_CONFIG: /config/serve-config.json
+    volumes:
+    - /opt/calibre-web/ts_data:/var/lib/tailscale/
+    - /opt/calibre-web/serve-config.json:/config/serve-config.json
+
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    environment:
+    - PUID=1000
+    - PGID=1000
+    - TZ=Etc/UTC
+    - DOCKER_MODS=linuxserver/mods:universal-calibre
+    - OAUTHLIB_RELAX_TOKEN_SCOPE=1
+    volumes:
+    - /opt/calibre-web/calibre-config:/config
+    - /opt/calibre-web/calibre-library:/books
+    network_mode: service:tailscale
+    restart: unless-stopped
