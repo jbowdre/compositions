@@ -7,4 +7,4 @@ services:
     - "8081:8080"
     volumes:
     - /opt/kineto/style.css:/app/style.css
-    command: -s style.css gemini://${HOSTNAME}
+    command: -s style.css gemini://${GEMHOSTNAME}
