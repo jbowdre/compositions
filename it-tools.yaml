@@ -1,0 +1,20 @@
+services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: tools-tailscale
+    restart: unless-stopped
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?err}
+      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
+      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_STATE_DIR: /var/lib/tailscale/
+      TS_SERVE_CONFIG: /config/serve-config.json
+    volumes:
+    - /opt/docker/tools/ts_data:/var/lib/tailscale/
+    - /opt/docker/tools/serve-config.json:/config/serve-config.json
+
+  tools:
+    container_name: tools
+    restart: unless-stopped
+    image: corentinth/it-tools:latest
+    network_mode: service:tailscale
