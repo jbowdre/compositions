@@ -1,9 +1,22 @@
 services:
+  tailscale:
+    image: tailscale/tailscale:latest
+    container_name: uptime-tailscale
+    restart: unless-stopped
+    ports:
+    - 3001:3001
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?err}
+      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
+      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_STATE_DIR: /var/lib/tailscale/
+    volumes:
+    - /opt/uptime/ts_data:/var/lib/tailscale/
+
   uptime-kuma:
     image: louislam/uptime-kuma:1
     container_name: uptime
     restart: unless-stopped
-    ports:
-    - 3001:3001
     volumes:
     - /opt/uptime/data:/app/data
+    network_mode: service:tailscale
