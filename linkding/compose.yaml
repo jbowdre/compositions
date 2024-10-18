@@ -1,26 +1,30 @@
+# linkding: Self-hosted bookmark manager that is designed be to be minimal, fast, and easy to set up using Docker.
+# https://github.com/sissbruecker/linkding
+# https://linkding.link/
+
 services:
-  tailscale:
+  ts-linkding:
     image: tailscale/tailscale:latest
-    container_name: linkding-tailscale
+    container_name: ts-linkding
     restart: unless-stopped
     ports:
     - 9090:9090
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
-      TS_STATE_DIR: "/var/lib/tailscale/"
+      TS_HOSTNAME: links
+      TS_STATE_DIR: /var/lib/tailscale/
       TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
-    - /opt/linkding/ts_data:/var/lib/tailscale/
-    - /opt/linkding/serve-config.json:/config/serve-config.json
+    - /opt/docker/linkding/ts_data:/var/lib/tailscale/
+    - /opt/docker/linkding/serve-config.json:/config/serve-config.json
 
   linkding:
     container_name: linkding
     image: sissbruecker/linkding:latest
-    network_mode: service:tailscale
+    network_mode: service:ts-linkding
     volumes:
-    - /opt/linkding/data:/etc/linkding/data
+    - /opt/docker/linkding/data:/etc/linkding/data
     environment:
       LD_AUTH_PROXY_LOGOUT_URL: ${LD_AUTH_PROXY_LOGOUT_URL:-}
       LD_AUTH_PROXY_USERNAME_HEADER: ${LD_AUTH_PROXY_USERNAME_HEADER:-}
