@@ -1,12 +1,14 @@
+# it-tools: Collection of handy online tools for developers, with great UX.
+# https://github.com/CorentinTh/it-tools
+
 services:
-  tailscale:
+  ts-tools:
     image: tailscale/tailscale:latest
-    container_name: tools-tailscale
+    container_name: ts-tools
     restart: unless-stopped
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
-      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_HOSTNAME: tools
       TS_STATE_DIR: /var/lib/tailscale/
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
@@ -17,4 +19,4 @@ services:
     container_name: tools
     restart: unless-stopped
     image: corentinth/it-tools:latest
-    network_mode: service:tailscale
+    network_mode: service:ts-tools
