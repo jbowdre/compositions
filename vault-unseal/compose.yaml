@@ -1,3 +1,6 @@
+# vault-unseal: auto-unseal utility for Hashicorp Vault
+# https://github.com/lrstanley/vault-unseal
+
 services:
   vault-unseal:
     image: ghcr.io/lrstanley/vault-unseal
@@ -7,4 +10,4 @@ services:
       ALLOW_SINGLE_NODE: true
       CONFIG_PATH: /etc/vault-unseal.yaml
     volumes:
-    - /opt/vault-unseal/vault-unseal.yaml:/etc/vault-unseal.yaml
+    - /opt/docker/vault-unseal/vault-unseal.yaml:/etc/vault-unseal.yaml
