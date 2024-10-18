@@ -1,23 +1,25 @@
+# cyberchef: The Cyber Swiss Army Knife - a web app for encryption, encoding, compression and data analysis
+# https://github.com/gchq/CyberChef
+
 services:
-  tailscale:
+  ts-cyberchef:
     image: tailscale/tailscale:latest
-    container_name: cyberchef-tailscale
+    container_name: ts-cyberchef
     restart: unless-stopped
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
-      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_HOSTNAME: cyber
       TS_STATE_DIR: /var/lib/tailscale/
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
-      - /opt/cyberchef/ts_data:/var/lib/tailscale/
-      - /opt/cyberchef/serve-config.json:/config/serve-config.json
+      - /opt/docker/cyberchef/ts_data:/var/lib/tailscale/
+      - /opt/docker/cyberchef/serve-config.json:/config/serve-config.json
 
   cyberchef:
     container_name: cyberchef
     image: mpepping/cyberchef:latest
     restart: unless-stopped
-    network_mode: service:tailscale
+    network_mode: service:ts-cyberchef
     healthcheck:
       test: curl --fail http://localhost:8000 || exit 1
       interval: 60s
