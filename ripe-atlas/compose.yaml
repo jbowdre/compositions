@@ -28,6 +28,12 @@ services:
       driver: json-file
       options:
          max-size: 10m
+    healthcheck:
+      test: find /var/atlas-probe/status/ -mmin -5 || exit
+      interval: 60s
+      retries: 5
+      start_period: 60s
+      timeout: 10s
 
   watchtower:
     image: containrrr/watchtower
