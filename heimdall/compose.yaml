@@ -1,17 +1,19 @@
+# heimdall: An Application dashboard and launcher
+# https://github.com/linuxserver/Heimdall
+
 services:
-  tailscale:
+  ts-heimdall:
     image: tailscale/tailscale:latest
-    container_name: heimdall-tailscale
+    container_name: ts-heimdall
     restart: unless-stopped
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: ${TS_HOSTNAME:-ts-docker}
-      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
+      TS_HOSTNAME: heimdall
       TS_STATE_DIR: /var/lib/tailscale/
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
-    - /opt/heimdall/ts_data:/var/lib/tailscale/
-    - /opt/heimdall/serve-config.json:/config/serve-config.json
+    - /opt/docker/heimdall/ts_data:/var/lib/tailscale/
+    - /opt/docker/heimdall/serve-config.json:/config/serve-config.json
 
   heimdall:
     image: lscr.io/linuxserver/heimdall:latest
@@ -21,6 +23,6 @@ services:
     - PGID=1000
     - TZ=Etc/UTC
     volumes:
-    - /opt/heimdall/config:/config
-    network_mode: service:tailscale
+    - /opt/docker/heimdall/config:/config
+    network_mode: service:ts-heimdall
     restart: unless-stopped
