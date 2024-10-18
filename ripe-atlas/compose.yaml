@@ -1,3 +1,7 @@
+# ripe-atlas: This is the RIPE Atlas software probe packaged as a Docker image.
+# https://github.com/Jamesits/docker-ripe-atlas
+# https://atlas.ripe.net/docs/howtos/software-probes.html
+
 services:
   ripe-atlas:
     image: jamesits/ripe-atlas:latest
@@ -5,8 +9,8 @@ services:
     environment:
       RXTXRPT: "yes"
     volumes:
-    - "/opt/ripe-atlas/etc:/var/atlas-probe/etc"
-    - "/opt/ripe-atlas/status:/var/atlas-probe/status"
+    - "/opt/docker/ripe-atlas/etc:/var/atlas-probe/etc"
+    - "/opt/docker/ripe-atlas/status:/var/atlas-probe/status"
     cap_drop:
     - ALL
     cap_add:
