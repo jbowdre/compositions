@@ -1,3 +1,7 @@
+# ntfy: Send push notifications to your phone or desktop using PUT/POST
+# https://github.com/binwiederhier/ntfy
+# https://ntfy.sh/
+
 services:
   ntfy:
     image: binwiederhier/ntfy
@@ -7,9 +11,9 @@ services:
     environment:
     - TZ=UTC    # optional: set desired timezone
     volumes:
-    - /opt/ntfy/cache/ntfy:/var/cache/ntfy
-    - /opt/ntfy/etc/ntfy:/etc/ntfy
-    - /opt/ntfy/lib/ntf:/var/lib/ntfy
+    - /opt/docker/ntfy/cache/ntfy:/var/cache/ntfy
+    - /opt/docker/ntfy/etc/ntfy:/etc/ntfy
+    - /opt/docker/ntfy/lib/ntf:/var/lib/ntfy
     ports:
     - 8080:80
     healthcheck: # this needs to be the port inside the container, not the host port
