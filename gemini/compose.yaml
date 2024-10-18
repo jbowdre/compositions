@@ -1,11 +1,13 @@
+
+
 services:
   agate:
     restart: unless-stopped
-    build: /opt/gemini/
+    build: /opt/docker/gemini/Dockerfile
     container_name: agate
     volumes:
-    - /opt/gemini/content:/var/agate/content
-    - /opt/gemini/certs:/var/agate/certs
+    - /opt/docker/gemini/content:/var/agate/content
+    - /opt/docker/gemini/certs:/var/agate/certs
     ports:
     - "1965:1965"
     command: >
