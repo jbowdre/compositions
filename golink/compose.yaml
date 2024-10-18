@@ -1,9 +1,12 @@
+# Tailscale golink: A private shortlink service for tailnets
+# https://github.com/tailscale/golink
+
 services:
   golink:
     container_name: golink
     restart: unless-stopped
     image: ghcr.io/tailscale/golink:main
     volumes:
-    - '/opt/golink/data:/home/nonroot'
+    - '/opt/docker/golink/data:/home/nonroot'
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
