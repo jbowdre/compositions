@@ -1,4 +1,5 @@
-
+# agate: Very simple server for the Gemini hypertext protocol
+# https://github.com/mbrubeck/agate
 
 services:
   agate:
