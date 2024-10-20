@@ -1,0 +1,34 @@
+# gotosocial: Fast, fun, small ActivityPub server.
+# https://github.com/superseriousbusiness/gotosocial
+# https://gotosocial.org/
+
+services:
+  ts-goto:
+    image: tailscale/tailscale:latest
+    container_name: ts-goto
+    restart: unless-stopped
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY:?err}
+      TS_HOSTNAME: goto
+      TS_STATE_DIR: /var/lib/tailscale/
+    volumes:
+    - /opt/docker/gotosocial/ts_data:/var/lib/tailscale/
+
+  gotosocial:
+    image: superseriousbusiness/gotosocial:latest
+    container_name: gotosocial
+    user: 1001:1001
+    environment:
+      GTS_ACCOUNT_DOMAIN: srsbsns.lol
+      GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
+      GTS_DB_TYPE: sqlite
+      GTS_HOST: goto.srsbsns.lol
+      GTS_LANDING_PAGE_USER: john
+      GTS_MEDIA_DESCRIPTION_MIN_CHARS: 20
+      GTS_WAZERO_COMPILATION_CACHE: /gotosocial/.cache
+      TZ: America/Chicago
+    volumes:
+      - /opt/docker/gotosocial/data:/gotosocial/storage
+      - /opt/docker/gotosocial/.cache:/gotosocial/.cache
+    restart: "unless-stopped"
+    network_mode: service:ts-goto
