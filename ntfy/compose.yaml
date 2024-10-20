@@ -9,7 +9,7 @@ services:
     command:
     - serve
     environment:
-    - TZ=UTC    # optional: set desired timezone
+    - TZ=America/Chicago    # optional: set desired timezone
     volumes:
     - /opt/docker/ntfy/cache/ntfy:/var/cache/ntfy
     - /opt/docker/ntfy/etc/ntfy:/etc/ntfy
