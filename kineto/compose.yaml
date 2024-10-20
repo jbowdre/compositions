@@ -10,4 +10,4 @@ services:
     - "8081:8080"
     volumes:
     - /opt/docker/kineto/style.css:/app/style.css
-    command: -s style.css gemini://${GEMHOSTNAME}
+    command: -s style.css gemini://capsule.jbowdre.lol
