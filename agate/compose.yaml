@@ -7,8 +7,8 @@ services:
     build: /opt/docker/gemini/Dockerfile
     container_name: agate
     volumes:
-    - /opt/docker/gemini/content:/var/agate/content
-    - /opt/docker/gemini/certs:/var/agate/certs
+    - /opt/docker/agate/content:/var/agate/content
+    - /opt/docker/agate/certs:/var/agate/certs
     ports:
     - "1965:1965"
     command: >
