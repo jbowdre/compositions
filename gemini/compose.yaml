@@ -13,6 +13,6 @@ services:
     - "1965:1965"
     command: >
       --content content --certs certs --addr 0.0.0.0:1965
-      --hostname ${HOSTNAME_1}
-      --hostname ${HOSTNAME_2}
+      --hostname gmi.runtimeterror.dev
+      --hostname capsule.jbowdre.lol
       --lang en-US
