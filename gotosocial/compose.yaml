@@ -23,7 +23,6 @@ services:
       GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
       GTS_DB_TYPE: sqlite
       GTS_HOST: goto.srsbsns.lol
-      GTS_INSTANCE_INJECT_MASTODON_VERSION: true
       GTS_LANDING_PAGE_USER: john
       GTS_MEDIA_DESCRIPTION_MIN_CHARS: 20
       GTS_WAZERO_COMPILATION_CACHE: /gotosocial/.cache
