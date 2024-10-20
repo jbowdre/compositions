@@ -21,7 +21,7 @@ services:
     environment:
     - PUID=1000
     - PGID=1000
-    - TZ=Etc/UTC
+    - TZ=America/Chicago
     volumes:
     - /opt/docker/heimdall/config:/config
     network_mode: service:ts-heimdall
