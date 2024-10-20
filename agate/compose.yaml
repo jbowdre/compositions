@@ -4,7 +4,7 @@
 services:
   agate:
     restart: unless-stopped
-    build: /opt/docker/gemini/Dockerfile
+    build: /opt/docker/agate/Dockerfile
     container_name: agate
     volumes:
     - /opt/docker/agate/content:/var/agate/content
