@@ -25,6 +25,11 @@ services:
       GTS_HOST: goto.srsbsns.lol
       GTS_LANDING_PAGE_USER: john
       GTS_MEDIA_DESCRIPTION_MIN_CHARS: 20
+      GTS_SMTP_FROM: ${GTS_SMTP_FROM:-}
+      GTS_SMTP_HOST: ${GTS_SMTP_HOST:-}
+      GTS_SMTP_PASSWORD: ${GTS_SMTP_PASSWORD:-}
+      GTS_SMTP_PORT: 587
+      GTS_SMTP_USERNAME: ${GTS_SMTP_USERNAME:-}
       GTS_WAZERO_COMPILATION_CACHE: /gotosocial/.cache
       TZ: America/Chicago
     volumes:
