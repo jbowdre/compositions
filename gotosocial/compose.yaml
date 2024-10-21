@@ -15,7 +15,7 @@ services:
     - /opt/docker/gotosocial/ts_data:/var/lib/tailscale/
 
   gotosocial:
-    image: superseriousbusiness/gotosocial:latest
+    image: superseriousbusiness/gotosocial:0.17.1
     container_name: gotosocial
     user: 1001:1001
     environment:
