@@ -6,7 +6,7 @@ services:
       - "5223:5223"
     restart: always
     volumes:
-      - /opt/simplexmq/config:/etc/opt/simplex:z
-      - /opt/simplexmq/logs:/var/opt/simplex:z
+      - /opt/docker/simplexmq/config:/etc/opt/simplex:z
+      - /opt/docker/simplexmq/logs:/var/opt/simplex:z
     environment:
       - addr=${SMP_ADDR}
