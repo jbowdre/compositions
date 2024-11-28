@@ -20,16 +20,13 @@ services:
     container_name: opengist
     restart: unless-stopped
     network_mode: service:ts-opengist
-    # ports:
-    #   - "6157:6157" # HTTP port
-    #   - "2222:2222" # SSH port, can be removed if you don't use SSH
     volumes:
     - "/opt/docker/opengist/data:/opengist"
     environment:
       OG_EXTERNAL_URL: ${OG_EXTERNAL_URL:-}
       OG_GITHUB_CLIENT_KEY: ${OG_GITHUB_CLIENT_KEY:-}
       OG_GITHUB_SECRET: ${OG_GITHUB_SECRET:-}
-      OG_SSH_EXTERNAL_DOMAIN: ${OG_SSH_EXTERNAL_DOMAIN:-}
+      OG_SSH_GIT_ENABLED: false
     healthcheck:
       test: curl --fail http://localhost:6157/healthcheck | grep '"database":"ok","opengist":"ok"' || exit 1
       interval: 60s
