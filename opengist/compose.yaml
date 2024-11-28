@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
     network_mode: service:ts-opengist
     volumes:
-    - "/opt/docker/opengist/data:/opengist"
+    - /opt/docker/opengist/data:/opengist
     environment:
       OG_EXTERNAL_URL: ${OG_EXTERNAL_URL:-}
       OG_GITHUB_CLIENT_KEY: ${OG_GITHUB_CLIENT_KEY:-}
