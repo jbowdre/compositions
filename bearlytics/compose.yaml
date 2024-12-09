@@ -17,7 +17,7 @@ services:
     - /opt/docker/bearlytics/ts_data:/var/lib/tailscale/
     - /opt/docker/bearlytics/serve-config.json:/config/serve-config.json
 
-bearlytics:
+  bearlytics:
     image: ghcr.io/hermanmartinus/bearlytics:sha-eee3e20
     network_mode: service:ts-bearlytics
     volumes:
