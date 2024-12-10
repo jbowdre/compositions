@@ -1,0 +1,4 @@
+opengist.example.com {
+  reverse_proxy http://opengist.tailnet-name.ts.net:6157
+}
+

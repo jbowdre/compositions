@@ -1,0 +1,10 @@
+ntfy.example.com, http://ntfy.example.com {
+  reverse_proxy localhost:8080
+  @httpget {
+    protocol http
+    method GET
+    path_regexp ^/([-_a-z0-9]{0,64}$|docs/|static/)
+  }
+  redir @httpget https://{host}{uri}
+}
+

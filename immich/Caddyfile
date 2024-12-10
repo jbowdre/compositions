@@ -1,0 +1,4 @@
+immich.example.com {
+  reverse_proxy http://immich.tailnet-name.ts.net:2283
+}
+

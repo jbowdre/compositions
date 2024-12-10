@@ -1,0 +1,4 @@
+it-tools.example.com {
+  reverse_proxy http://it-tools.tailnet-name.ts.net:80
+}
+

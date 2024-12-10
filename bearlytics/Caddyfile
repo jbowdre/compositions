@@ -1,0 +1,15 @@
+bearlytics.example.com {
+  # don't serve any admin paths publicly,
+  # those will only be accessed within the tailnet
+  handle /admin/* {
+    respond 403
+  }
+  handle /login/* {
+    respond 403
+  }
+  handle /all-hits/* {
+    respond 403
+  }
+  reverse_proxy http://localhost:8000
+}
+

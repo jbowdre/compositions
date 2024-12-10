@@ -1,0 +1,4 @@
+silverbullet.example.com {
+  reverse_proxy http://silverbullet.tailnet-name.ts.net:3000
+}
+

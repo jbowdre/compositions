@@ -1,0 +1,7 @@
+gotosocial.example.com {
+  encode zstd gzip
+  reverse_proxy http://gotosocial.tailnet-name.ts.net:8080 {
+    flush_interval -1
+  }
+}
+

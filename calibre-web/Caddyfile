@@ -1,0 +1,4 @@
+calibre-web.example.com {
+  reverse_proxy http://calibre-web.tailnet-name.ts.net:8083
+}
+
