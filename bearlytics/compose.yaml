@@ -18,7 +18,7 @@ services:
     - /opt/docker/bearlytics/serve-config.json:/config/serve-config.json
 
   bearlytics:
-    image: ghcr.io/hermanmartinus/bearlytics:sha-eee3e20
+    image: ghcr.io/hermanmartinus/bearlytics:latest
     network_mode: service:ts-bearlytics
     volumes:
     - /opt/docker/bearlytics/analytics:/app/data
