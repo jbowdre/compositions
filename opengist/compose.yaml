@@ -3,7 +3,7 @@
 
 services:
   ts-opengist:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.76
     container_name: ts-opengist
     restart: unless-stopped
     environment:

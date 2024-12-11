@@ -4,7 +4,7 @@
 
 services:
   ts-linkding:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.76
     container_name: ts-linkding
     restart: unless-stopped
     ports:

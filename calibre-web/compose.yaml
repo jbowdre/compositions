@@ -3,7 +3,7 @@
 
 services:
   ts-calibre:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.76
     container_name: ts-calibre
     restart: unless-stopped
     environment:

@@ -3,7 +3,7 @@
 
 services:
   ts-cyberchef:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.76
     container_name: ts-cyberchef
     restart: unless-stopped
     environment:

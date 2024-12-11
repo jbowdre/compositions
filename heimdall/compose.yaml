@@ -3,7 +3,7 @@
 
 services:
   ts-heimdall:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.76
     container_name: ts-heimdall
     restart: unless-stopped
     environment:
