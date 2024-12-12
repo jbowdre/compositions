@@ -5,15 +5,17 @@ services:
   ts-cyberchef:
     image: tailscale/tailscale:v1.76
     container_name: ts-cyberchef
-    restart: unless-stopped
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
       TS_HOSTNAME: cyber
       TS_STATE_DIR: /var/lib/tailscale/
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
-      - /opt/docker/cyberchef/ts_data:/var/lib/tailscale/
-      - /opt/docker/cyberchef/serve-config.json:/config/serve-config.json
+      - /cephfs/cyberchef/ts_data:/var/lib/tailscale/
+      - /cephfs/cyberchef/serve-config.json:/config/serve-config.json
+    deploy:
+      restart_policy:
+        condition: on-failure
 
   cyberchef:
     container_name: cyberchef
@@ -26,3 +28,7 @@ services:
       retries: 5
       start_period: 20s
       timeout: 10s
+    deploy:
+      restart_policy:
+        condition: on-failure
+
