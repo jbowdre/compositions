@@ -4,6 +4,8 @@
 services:
   vault-unseal:
     image: ghcr.io/lrstanley/vault-unseal
+    networks:
+    - vault
     environment:
       ALLOW_SINGLE_NODE: "true"
       CONFIG_PATH: "/etc/vault-unseal.yaml"
@@ -12,3 +14,7 @@ services:
     deploy:
       restart_policy:
         condition: on-failure
+
+networks:
+  vault:
+    external: true
