@@ -5,7 +5,6 @@
 services:
   ts-vault:
     image: tailscale/tailscale:v1.76
-    container_name: ts-vault
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
       TS_HOSTNAME: vault
@@ -16,11 +15,10 @@ services:
     - /cephfs/vault/serve-config.json:/config/serve-config.json
     deploy:
       restart_policy:
-        condition: on_failure
+        condition: on-failure
 
   vault:
     image: hashicorp/vault
-    container_name: vault
     environment:
       VAULT_ADDR: 'https://0.0.0.0:8200'
     cap_add:
@@ -32,5 +30,5 @@ services:
     command: vault server -config=/vault/config/vault.hcl
     deploy:
       restart_policy:
-        condition: on_failure
+        condition: on-failure
 
