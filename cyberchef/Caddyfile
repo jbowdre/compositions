@@ -1,4 +1,4 @@
 cyberchef.example.com {
-  reverse_proxy http://cyberchef.tailnet-name.ts.net:8000
+  reverse_proxy https://cyberchef.tailnet-name.ts.net
 }
 
