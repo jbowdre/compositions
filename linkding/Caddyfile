@@ -1,4 +1,4 @@
 linkding.example.com {
-  reverse_proxy http://linkding.tailnet-name.ts.net:9090
+  reverse_proxy https://linkding.tailnet-name.ts.net
 }
 
