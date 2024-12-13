@@ -11,8 +11,8 @@ services:
       TS_STATE_DIR: /var/lib/tailscale/
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
-    - /cephs/silverbullet/ts_data:/var/lib/tailscale/
-    - /cephs/silverbullet/serve-config.json:/config/serve-config.json
+    - /cephfs/silverbullet/ts_data:/var/lib/tailscale/
+    - /cephfs/silverbullet/serve-config.json:/config/serve-config.json
     deploy:
       restart_policy:
         condition: on-failure
@@ -22,7 +22,7 @@ services:
     environment:
       SB_USER: "${SB_CREDS}"
     volumes:
-    - /cephs/silverbullet/space:/space
+    - /cephfs/silverbullet/space:/space
     deploy:
       restart_policy:
         condition: on-failure
