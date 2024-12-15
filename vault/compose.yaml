@@ -18,7 +18,7 @@ services:
     environment:
       VAULT_ADDR: 'http://0.0.0.0:8200'
     healthcheck:
-      test: vault status || exit 1
+      test: vault status | grep "Initialized" || exit 1
       interval: 60s
       retries: 3
       start_period: 40s
