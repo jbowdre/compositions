@@ -2,30 +2,33 @@
 # https://github.com/janeczku/calibre-web
 
 services:
-  ts-calibre:
-    image: tailscale/tailscale:v1.76
-    container_name: ts-calibre
-    restart: unless-stopped
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: calibre
-      TS_STATE_DIR: /var/lib/tailscale/
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-    - /opt/docker/calibre-web/ts_data:/var/lib/tailscale/
-    - /opt/docker/calibre-web/serve-config.json:/config/serve-config.json
-
   calibre:
     image: lscr.io/linuxserver/calibre-web:latest
-    container_name: calibre-web
+    networks:
+    - tailnet
+    volumes:
+    - /cephfs/calibre-web/calibre-config:/config
+    - /cephfs/calibre-web/calibre-library:/books
     environment:
     - PUID=1000
     - PGID=1000
     - TZ=Etc/UTC
     - DOCKER_MODS=linuxserver/mods:universal-calibre
     - OAUTHLIB_RELAX_TOKEN_SCOPE=1
-    volumes:
-    - /opt/docker/calibre-web/calibre-config:/config
-    - /opt/docker/calibre-web/calibre-library:/books
-    network_mode: service:ts-calibre
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "calibre"
+      tsdproxy.container_port: 8083
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
+
+networks:
+  tailnet:
+    external: true
+

@@ -5,12 +5,9 @@
 services:
   ripe-atlas:
     image: jamesits/ripe-atlas:latest
-    restart: always
-    environment:
-      RXTXRPT: "yes"
     volumes:
-    - "/opt/docker/ripe-atlas/etc:/var/atlas-probe/etc"
-    - "/opt/docker/ripe-atlas/status:/var/atlas-probe/status"
+    - "/cephfs/ripe-atlas/etc:/var/atlas-probe/etc"
+    - "/cephfs/ripe-atlas/status:/var/atlas-probe/status"
     cap_drop:
     - ALL
     cap_add:
@@ -19,25 +16,24 @@ services:
     - SETGID
     - DAC_OVERRIDE
     - NET_RAW
-    mem_limit: "64000000000"
-    mem_reservation: 64m
-    labels:
-    - "traefik.enable=false"
-    - "com.centurylinklabs.watchtower.enable=true"
     logging:
       driver: json-file
       options:
          max-size: 10m
+    environment:
+      RXTXRPT: "yes"
     healthcheck:
       test: find /var/atlas-probe/status/ -mmin -5 || exit
       interval: 60s
       retries: 5
       start_period: 60s
       timeout: 10s
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      shepherd.enable: "true"
 
-  watchtower:
-    image: containrrr/watchtower
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-      # - /root/.docker/config.json:/config.json # enable only if you need it
-    command: --cleanup --include-restarting --include-stopped --revive-stopped --label-enable

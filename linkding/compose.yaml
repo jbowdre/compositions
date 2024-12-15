@@ -3,37 +3,34 @@
 # https://linkding.link/
 
 services:
-  ts-linkding:
-    image: tailscale/tailscale:v1.76
-    container_name: ts-linkding
-    restart: unless-stopped
-    ports:
-    - 9090:9090
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: links
-      TS_STATE_DIR: /var/lib/tailscale/
-      TS_EXTRA_ARGS: ${TS_EXTRA_ARGS:-}
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-    - /opt/docker/linkding/ts_data:/var/lib/tailscale/
-    - /opt/docker/linkding/serve-config.json:/config/serve-config.json
-
   linkding:
-    container_name: linkding
     image: sissbruecker/linkding:latest
-    network_mode: service:ts-linkding
+    networks:
+    - tailnet
     volumes:
-    - /opt/docker/linkding/data:/etc/linkding/data
+    - /cephfs/linkding/data:/etc/linkding/data
     environment:
-      LD_AUTH_PROXY_LOGOUT_URL: ${LD_AUTH_PROXY_LOGOUT_URL:-}
-      LD_AUTH_PROXY_USERNAME_HEADER: ${LD_AUTH_PROXY_USERNAME_HEADER:-}
-      LD_DISABLE_BACKGROUND_TASKS: False
-      LD_DISABLE_URL_VALIDATION: False
-      LD_ENABLE_AUTH_PROXY: ${LD_ENABLE_AUTH_PROXY:-False}
+      LD_DISABLE_BACKGROUND_TASKS: "False"
+      LD_DISABLE_URL_VALIDATION: "False"
       LD_FAVICON_PROVIDER: https://favicon.twenty.com/{domain}/32
       LD_HOST_PORT: 9090
-      LD_LOG_X_FORWARDED_FOR: True
+      LD_LOG_X_FORWARDED_FOR: "True"
       LD_SUPERUSER_NAME: ${LD_SUPERUSER_NAME:-admin}
       LD_SUPERUSER_PASSWORD: ${LD_SUPERUSER_PASSWORD:-}
-    restart: unless-stopped
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "links"
+      tsdproxy.container_port: 9090
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
+
+networks:
+  tailnet:
+    external: true
+

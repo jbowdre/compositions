@@ -3,30 +3,53 @@
 # https://www.vaultproject.io/
 
 services:
-  ts-vault:
-    image: tailscale/tailscale:v1.76
-    container_name: ts-vault
-    restart: unless-stopped
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: vault
-      TS_STATE_DIR: "/var/lib/tailscale/"
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-    - /opt/docker/vault/ts_data:/var/lib/tailscale/
-    - /opt/docker/vault/serve-config.json:/config/serve-config.json
-
   vault:
     image: hashicorp/vault
-    container_name: vault
-    restart: unless-stopped
-    environment:
-      VAULT_ADDR: 'https://0.0.0.0:8200'
+    command: vault server -config=/vault/config/vault.hcl
+    networks:
+    - tailnet
+    - vault
+    volumes:
+    - /cephfs/vault/data:/vault/data
+    - /cephfs/vault/config:/vault/config
+    - /cephfs/vault/log:/vault/log
     cap_add:
     - IPC_LOCK
+    environment:
+      VAULT_ADDR: 'https://0.0.0.0:8200'
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "vault"
+      tsdproxy.container_port: 8200
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
+
+  vault-unseal:
+    image: ghcr.io/lrstanley/vault-unseal
+    networks:
+    - vault
     volumes:
-    - /opt/docker/vault/data:/vault/data
-    - /opt/docker/vault/config:/vault/config
-    - /opt/docker/vault/log:/vault/log
-    command: vault server -config=/vault/config/vault.hcl
-    network_mode: "service:ts-vault"
+    - /cephfs/vault-unseal/vault-unseal.yaml:/etc/vault-unseal.yaml
+    environment:
+      ALLOW_SINGLE_NODE: "true"
+      CONFIG_PATH: "/etc/vault-unseal.yaml"
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      shepherd.enable: "true"
+
+networks:
+  tailnet:
+    external: true
+  vault:
+

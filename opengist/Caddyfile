@@ -1,4 +1,4 @@
-opengist.example.com {
-  reverse_proxy http://opengist.tailnet-name.ts.net:6157
+gist.example.com {
+  reverse_proxy https://gist.tailnet-name.ts.net
 }
 

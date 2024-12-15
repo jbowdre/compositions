@@ -11,3 +11,5 @@ services:
       CONFIG_PATH: /etc/vault-unseal.yaml
     volumes:
     - /opt/docker/vault-unseal/vault-unseal.yaml:/etc/vault-unseal.yaml
+
+
