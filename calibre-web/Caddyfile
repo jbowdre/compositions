@@ -1,4 +1,4 @@
-calibre-web.example.com {
-  reverse_proxy https://calibre-web.tailnet-name.ts.net
+calibre.example.com {
+  reverse_proxy https://calibre.tailnet-name.ts.net
 }
 

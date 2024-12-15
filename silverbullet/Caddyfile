@@ -1,4 +1,4 @@
-silverbullet.example.com {
-  reverse_proxy https://silverbullet.tailnet-name.ts.net
+sb.example.com {
+  reverse_proxy https://sb.tailnet-name.ts.net
 }
 

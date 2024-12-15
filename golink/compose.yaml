@@ -3,10 +3,17 @@
 
 services:
   golink:
-    container_name: golink
-    restart: unless-stopped
     image: ghcr.io/tailscale/golink:main
     volumes:
-    - '/opt/docker/golink/data:/home/nonroot'
+    - '/cephfs/golink/data:/home/nonroot'
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      shepherd.enable: "true"
+

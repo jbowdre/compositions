@@ -2,27 +2,30 @@
 # https://github.com/thomiceli/opengist
 
 services:
-  ts-opengist:
-    image: tailscale/tailscale:v1.76
-    container_name: ts-opengist
-    restart: unless-stopped
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: gist
-      TS_STATE_DIR: /var/lib/tailscale/
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-    - /opt/docker/opengist/ts_data:/var/lib/tailscale/
-    - /opt/docker/opengist/serve-config.json:/config/serve-config.json
-
   opengist:
     image: ghcr.io/thomiceli/opengist:1
-    container_name: opengist
-    restart: unless-stopped
-    network_mode: service:ts-opengist
+    networks:
+    - tailnet
     volumes:
-    - /opt/docker/opengist/data:/opengist
+    - /cephfs/opengist/data:/opengist
     environment:
       OG_GITHUB_CLIENT_KEY: ${OG_GITHUB_CLIENT_KEY:-}
       OG_GITHUB_SECRET: ${OG_GITHUB_SECRET:-}
-      OG_SSH_GIT_ENABLED: false
+      OG_SSH_GIT_ENABLED: "false"
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "gist"
+      tsdproxy.container_port: 6157
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
+
+networks:
+  tailnet:
+    external: true
+

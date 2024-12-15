@@ -2,25 +2,10 @@
 # https://github.com/gchq/CyberChef
 
 services:
-  ts-cyberchef:
-    image: tailscale/tailscale:v1.76
-    container_name: ts-cyberchef
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: cyber
-      TS_STATE_DIR: /var/lib/tailscale/
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-      - /cephfs/cyberchef/ts_data:/var/lib/tailscale/
-      - /cephfs/cyberchef/serve-config.json:/config/serve-config.json
-    deploy:
-      restart_policy:
-        condition: on-failure
-
   cyberchef:
-    container_name: cyberchef
     image: mpepping/cyberchef:latest
-    restart: unless-stopped
+    networks:
+    - tailnet
     healthcheck:
       test: curl --fail http://localhost:8000 || exit 1
       interval: 60s
@@ -29,5 +14,18 @@ services:
       timeout: 10s
     deploy:
       restart_policy:
-        condition: on-failure
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "cyber"
+      tsdproxy.container_port: 8000
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
+
+networks:
+  tailnet:
+    external: true
 

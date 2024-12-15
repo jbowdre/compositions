@@ -16,5 +16,9 @@ services:
     deploy:
       mode: global
       restart_policy:
-        condition: on-failure
-
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      shepherd.enable: "true"

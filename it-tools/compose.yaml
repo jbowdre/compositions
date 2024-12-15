@@ -2,21 +2,24 @@
 # https://github.com/CorentinTh/it-tools
 
 services:
-  ts-tools:
-    image: tailscale/tailscale:v1.76
-    container_name: ts-tools
-    restart: unless-stopped
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: tools
-      TS_STATE_DIR: /var/lib/tailscale/
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-    - /opt/docker/tools/ts_data:/var/lib/tailscale/
-    - /opt/docker/tools/serve-config.json:/config/serve-config.json
-
   tools:
-    container_name: tools
-    restart: unless-stopped
     image: corentinth/it-tools:latest
-    network_mode: service:ts-tools
+    networks:
+    - tailnet
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "tools"
+      tsdproxy.container_port: 80
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
+
+networks:
+  tailnet:
+    external: true
+

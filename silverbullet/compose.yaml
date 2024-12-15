@@ -3,32 +3,28 @@
 # https://silverbullet.md/
 
 services:
-  tailscale:
-    image: tailscale/tailscale:v1.76
-    environment:
-      TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: sb
-      TS_STATE_DIR: /var/lib/tailscale/
-      TS_SERVE_CONFIG: /config/serve-config.json
-    volumes:
-    - /cephfs/silverbullet/ts_data:/var/lib/tailscale/
-    - /cephfs/silverbullet/serve-config.json:/config/serve-config.json
-    deploy:
-      restart_policy:
-        condition: on-failure
-
   silverbullet:
     image: zefhemel/silverbullet
-    environment:
-      SB_USER: "${SB_CREDS}"
+    networks:
+    - tailnet
     volumes:
     - /cephfs/silverbullet/space:/space
+    environment:
+      SB_USER: "${SB_CREDS}"
     deploy:
       restart_policy:
-        condition: on-failure
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "sb"
+      tsdproxy.container_port: 3000
+      tsdproxy.ephemeral: "true"
+      shepherd.enable: "true"
 
-  # watchtower:
-  #   image: containrrr/watchtower
-  #   container_name: wt-silverbullet
-  #   volumes:
-  #   - /var/run/docker.sock:/var/run/docker.sock
+networks:
+  tailnet:
+    external: true
+
