@@ -21,4 +21,4 @@ services:
         max_attempts: 3
         window: 120s
     labels:
-      shepherd.enable: "true"
+      shepherd.enable: "false"
