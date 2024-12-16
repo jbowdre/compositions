@@ -29,7 +29,6 @@ services:
       tsdproxy.name: "heimdall"
       tsdproxy.container_port: 80
       tsdproxy.ephemeral: "true"
-      shepherd.enable: "true"
 
 networks:
   tailnet:

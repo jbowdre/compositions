@@ -34,7 +34,6 @@ services:
       tsdproxy.name: "links"
       tsdproxy.container_port: 9090
       tsdproxy.ephemeral: "true"
-      shepherd.enable: "true"
 
 networks:
   tailnet:

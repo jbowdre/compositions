@@ -23,7 +23,6 @@ services:
       tsdproxy.name: "tools"
       tsdproxy.container_port: 80
       tsdproxy.ephemeral: "true"
-      shepherd.enable: "true"
 
 networks:
   tailnet:

@@ -28,7 +28,6 @@ services:
       tsdproxy.name: "sb"
       tsdproxy.container_port: 3000
       tsdproxy.ephemeral: "true"
-      shepherd.enable: "true"
 
 networks:
   tailnet:

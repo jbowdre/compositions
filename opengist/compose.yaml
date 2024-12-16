@@ -29,7 +29,6 @@ services:
       tsdproxy.name: "gist"
       tsdproxy.container_port: 6157
       tsdproxy.ephemeral: "true"
-      shepherd.enable: "true"
 
 networks:
   tailnet:

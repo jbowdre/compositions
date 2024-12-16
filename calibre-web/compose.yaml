@@ -32,7 +32,6 @@ services:
       tsdproxy.name: "calibre"
       tsdproxy.container_port: 8083
       tsdproxy.ephemeral: "true"
-      shepherd.enable: "true"
 
 networks:
   tailnet:
