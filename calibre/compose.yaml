@@ -1,0 +1,91 @@
+# calibre-web-automated: Calibre-Web but automated and with Calibre features! Fully automate and simplify your eBook set up!
+# https://github.com/crocodilestick/Calibre-Web-Automated
+# calibre-web-automated-downloader
+# https://github.com/calibrain/calibre-web-automated-book-downloader
+
+services:
+  calibre:
+    image: crocodilestick/calibre-web-automated:latest
+    networks:
+    - tailnet
+    - calibre
+    ports:
+    - 8083:8083
+    volumes:
+    - /cephfs/calibre/config:/config
+    - /cephfs/calibre/ingest:/cwa-book-ingest
+    - /cephfs/calibre/library:/calibre-library
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: "Etc/UTC"
+      DOCKER_MODS: "linuxserver/mods:universal-calibre"
+    healthcheck:
+      test: curl --fail http://localhost:8083 || exit 1
+      interval: 60s
+      retries: 3
+      start_period: 20s
+      timeout: 10s
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "calibre"
+      tsdproxy.container_port: 8083
+      tsdproxy.ephemeral: "true"
+
+  calibre-downloader:
+    image: ghcr.io/calibrain/calibre-web-automated-book-downloader:latest
+    networks:
+    - tailnet
+    - calibre
+    ports:
+    - 8084:8084
+    volumes:
+    - /cephfs/calibre/ingest:/cwa-book-ingest
+    environment:
+      UID: 1000
+      GID: 1000
+      FLASK_PORT: 8084
+      FLASK_DEBUG: "false"
+      CLOUDFLARE_PROXY_URL: "http://cloudflarebypass:8000"
+      INGEST_DIR: "/cwa-book-ingest"
+      BOOK_LANGUAGE: "en"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8084/request/api/status"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
+      start_period: 5s
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "calibre-downloader"
+      tsdproxy.container_port: 8084
+      tsdproxy.ephemeral: "true"
+
+  cloudflarebypass:
+    image: ghcr.io/sarperavci/cloudflarebypassforscraping:latest
+    networks:
+    - calibre
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+networks:
+  calibre:
+  tailnet:
+    external: true
+
