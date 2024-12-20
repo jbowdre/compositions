@@ -34,7 +34,7 @@ services:
         window: 120s
     labels:
       tsdproxy.enable: "true"
-      tsdproxy.name: "calibre"
+      tsdproxy.name: "library"
       tsdproxy.container_port: 8083
       tsdproxy.ephemeral: "true"
 
@@ -69,7 +69,7 @@ services:
         window: 120s
     labels:
       tsdproxy.enable: "true"
-      tsdproxy.name: "calibre-downloader"
+      tsdproxy.name: "bookstore"
       tsdproxy.container_port: 8084
       tsdproxy.ephemeral: "true"
 
