@@ -3,7 +3,7 @@
 
 services:
   ts-bearlytics:
-    image: tailscale/tailscale:v1.78.3
+    image: tailscale/tailscale:v1.76
     container_name: ts-bearlytics
     restart: unless-stopped
     ports:

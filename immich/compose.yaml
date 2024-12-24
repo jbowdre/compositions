@@ -2,7 +2,7 @@ name: immich
 
 services:
   tailscale:
-    image: tailscale/tailscale:v1.78.3
+    image: tailscale/tailscale:v1.76
     container_name: immich_tailscale
     restart: unless-stopped
     environment:
