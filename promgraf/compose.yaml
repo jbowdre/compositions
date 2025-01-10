@@ -5,7 +5,7 @@
 
 services:
   ts-promgraf:
-    image: tailscale/tailscale:latest
+    image: tailscale/tailscale:v1.78.3
     container_name: ts-promgraf
     restart: unless-stopped
     environment:
