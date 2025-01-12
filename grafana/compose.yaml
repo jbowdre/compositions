@@ -1,21 +1,22 @@
-# promgraf: Prometheus + Grafana + InfluxDB metrics/monitoring stack.
+# Grafana: Prometheus + Grafana + InfluxDB metrics/monitoring stack.
 # https://github.com/prometheus/prometheus/
 # https://github.com/grafana/grafana
 # https://github.com/influxdata/InfluxDB
+# https://github.com/academo/grafana-alerting-ntfy-webhook-integration
 
 services:
-  ts-promgraf:
+  ts-grafana:
     image: tailscale/tailscale:v1.78.3
-    container_name: ts-promgraf
+    container_name: ts-grafana
     restart: unless-stopped
     environment:
       TS_AUTHKEY: ${TS_AUTHKEY:?err}
-      TS_HOSTNAME: promgraf
+      TS_HOSTNAME: grafana
       TS_STATE_DIR: /var/lib/tailscale/
       TS_SERVE_CONFIG: /config/serve-config.json
     volumes:
-      - /opt/docker/promgraf/ts_data:/var/lib/tailscale/
-      - /opt/docker/promgraf/serve-config.json:/config/serve-config.json
+      - /opt/docker/grafana/ts_data:/var/lib/tailscale/
+      - /opt/docker/grafana/serve-config.json:/config/serve-config.json
 
   prometheus:
     image: prom/prometheus
@@ -24,33 +25,33 @@ services:
        - '--config.file=/etc/prometheus/prometheus.yml'
     # ports:
       # - 9090:9090
-    network_mode: service:ts-promgraf
+    network_mode: service:ts-grafana
     restart: unless-stopped
     volumes:
-      - /opt/docker/promgraf/prometheus:/etc/prometheus
-      - /opt/docker/promgraf/prom_data:/prometheus
+      - /opt/docker/grafana/prometheus:/etc/prometheus
+      - /opt/docker/grafana/prom_data:/prometheus
 
   grafana:
     image: grafana/grafana
     container_name: grafana
     # ports:
       # - 3000:3000
-    network_mode: service:ts-promgraf
+    network_mode: service:ts-grafana
     restart: unless-stopped
     user: '0'
     environment:
       - GF_SECURITY_ADMIN_USER=${GF_ADMIN_USER}
       - GF_SECURITY_ADMIN_PASSWORD=${GF_ADMIN_PASSWORD}
     volumes:
-      - /opt/docker/promgraf/grafana:/etc/grafana/provisioning/datasources
-      - /opt/docker/promgraf/graf_data:/var/lib/grafana
+      - /opt/docker/grafana/grafana:/etc/grafana/provisioning/datasources
+      - /opt/docker/grafana/graf_data:/var/lib/grafana
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
     # ports:
       # - 8080:8080
-    network_mode: service:ts-promgraf
+    network_mode: service:ts-grafana
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
@@ -62,7 +63,7 @@ services:
     container_name: influxdb
     # ports:
       # - 8086:8086
-    network_mode: service:ts-promgraf
+    network_mode: service:ts-grafana
     environment:
       DOCKER_INFLUXDB_INIT_MODE: setup
       DOCKER_INFLUXDB_INIT_USERNAME: ${INFLUX_USERNAME}
@@ -70,8 +71,8 @@ services:
       DOCKER_INFLUXDB_INIT_ORG: lab
       DOCKER_INFLUXDB_INIT_BUCKET: proxmox
     volumes:
-      - /opt/docker/promgraf/influxdb/data:/var/lib/influxdb2
-      - /opt/docker/promgraf/influxdb/config:/etc/influxdb2
+      - /opt/docker/grafana/influxdb/data:/var/lib/influxdb2
+      - /opt/docker/grafana/influxdb/config:/etc/influxdb2
 
   grafana-ntfy:
     image: academo/grafana-ntfy:latest
