@@ -78,6 +78,4 @@ services:
     hostname: grafana-ntfy
     expose:
       - 8080 #only accesible to other containers
-    networks:
-      - internal
     command: -ntfy-url=${NTFY_URL}
