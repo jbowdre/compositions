@@ -73,3 +73,11 @@ services:
       - /opt/docker/promgraf/influxdb/data:/var/lib/influxdb2
       - /opt/docker/promgraf/influxdb/config:/etc/influxdb2
 
+  grafana-ntfy:
+    image: academo/grafana-ntfy:latest
+    hostname: grafana-ntfy
+    expose:
+      - 8080 #only accesible to other containers
+    networks:
+      - internal
+    command: -ntfy-url=${NTFY_URL}
