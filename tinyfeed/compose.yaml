@@ -1,0 +1,10 @@
+# tinyfeed: Generate a static HTML page from a collection of feeds wtih a simple CLI tool
+# https://github.com/TheBigRoomXXL/tinyfeed/
+
+services:
+  tinyfeed:
+    image: thebigroomxxl/tinyfeed
+    volumes:
+      - /opt/docker/tinyfeed:/app
+    command: --daemon --interval 60 --input feeds.txt --output index.html
+    restart: unless-stopped
