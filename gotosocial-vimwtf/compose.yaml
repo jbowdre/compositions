@@ -1,0 +1,38 @@
+# gotosocial: Fast, fun, small ActivityPub server.
+# https://github.com/superseriousbusiness/gotosocial
+# https://gotosocial.org/
+# serving http://vim.wtf
+
+services:
+  gotosocial:
+    image: superseriousbusiness/gotosocial:0.17.3
+    container_name: gotosocial
+    restart: unless-stopped
+    user: 1004:1004
+    ports:
+      - 127.0.0.1:8888:8080
+    environment:
+      GTS_ACCOUNTS_ALLOW_CUSTOM_CSS: true
+      GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
+      GTS_DB_TYPE: sqlite
+      GTS_HOST: vim.wtf
+      GTS_LANDING_PAGE_USER: wq
+      GTS_MEDIA_DESCRIPTION_MIN_CHARS: 20
+      GTS_SMTP_FROM: ${SMTP_FROM}
+      GTS_SMTP_HOST: ${SMTP_HOST}
+      GTS_SMTP_PASSWORD: ${SMTP_PASSWORD}
+      GTS_SMTP_PORT: 587
+      GTS_SMTP_USERNAME: ${SMTP_USERNAME}
+      GTS_STORAGE_BACKEND: s3
+      GTS_STORAGE_S3_ACCESS_KEY: ${S3_ACCESS_KEY}
+      GTS_STORAGE_S3_BUCKET: ${S3_BUCKET}
+      GTS_STORAGE_S3_ENDPOINT: ${S3_ENDPOINT}
+      GTS_STORAGE_S3_SECRET_KEY: ${S3_SECRET_KEY}
+      GTS_TRUSTED_PROXIES: 127.0.0.1/32
+      GTS_WAZERO_COMPILATION_CACHE: /gotosocial/.cache
+      TZ: America/Chicago
+    volumes:
+      - /opt/docker/gotosocial/data:/gotosocial/storage
+      - /opt/docker/gotosocial/.cache:/gotosocial/.cache
+      - /opt/docker/gotosocial/themes/catppuccin.css:/gotosocial/web/assets/themes/catppuccin.css
+      - /opt/docker/gotosocial/themes/catppuccin-mocha-sky.css:/gotosocial/web/assets/themes/catppuccin-mocha-sky.css
