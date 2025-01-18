@@ -37,3 +37,9 @@ services:
       - /opt/docker/gotosocial/.cache:/gotosocial/.cache
       - /opt/docker/gotosocial/themes/catppuccin.css:/gotosocial/web/assets/themes/catppuccin.css
       - /opt/docker/gotosocial/themes/catppuccin-mocha-sky.css:/gotosocial/web/assets/themes/catppuccin-mocha-sky.css
+    healthcheck:
+      test: wget --no-verbose --tries=1 --spider http://localhost:8080/readyz || exit 1
+      interval: 120s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
