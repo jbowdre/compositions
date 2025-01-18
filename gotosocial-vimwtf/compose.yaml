@@ -10,7 +10,7 @@ services:
     restart: unless-stopped
     user: 1004:1004
     ports:
-      - 127.0.0.1:8888:8080
+      - 8888:8080
     environment:
       GTS_ACCOUNTS_ALLOW_CUSTOM_CSS: true
       GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
