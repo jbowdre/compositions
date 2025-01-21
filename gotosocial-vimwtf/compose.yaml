@@ -13,6 +13,7 @@ services:
       - 8888:8080
     environment:
       GTS_ACCOUNTS_ALLOW_CUSTOM_CSS: true
+      GTS_ADVANCED_RATE_LIMIT_EXCEPTIONS: "${RATE_LIMIT_EXCEPTIONS}"
       GTS_DB_ADDRESS: /gotosocial/storage/sqlite.db
       GTS_DB_TYPE: sqlite
       GTS_HOST: vim.wtf
