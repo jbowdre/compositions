@@ -1,0 +1,68 @@
+# phpipam: open-source web IP address management
+# https://github.com/phpipam/phpipam
+# https://github.com/phpipam-docker/phpipam-docker
+
+services:
+  phpipam-web:
+    image: phpipam/phpipam-www:latest
+    networks:
+    - tailnet
+    - ipam
+    environment:
+      - TZ=America/Chicago
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS=${PHPIPAM_DB_PASS}
+      - IPAM_DATABASE_WEBHOST=%
+      - IPAM_DISABLE_INSTALLER=true
+      - IPAM_TRUST_X_FORWARDED=true
+    depends_on:
+      - phpipam-mariadb
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    labels:
+      tsdproxy.enable: "true"
+      tsdproxy.name: "ipam"
+      tsdproxy.container_port: 80
+      tsdproxy.ephemeral: "true"
+
+  phpipam-cron:
+    image: phpipam/phpipam-cron:latest
+    networks:
+    - ipam
+    environment:
+      - TZ=America/Chicago
+      - IPAM_DATABASE_HOST=phpipam-mariadb
+      - IPAM_DATABASE_PASS=${PHPIPAM_DB_PASS}
+      - SCAN_INTERVAL=1h
+    depends_on:
+      - phpipam-mariadb
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+  phpipam-mariadb:
+    image: mariadb:latest
+    networks:
+    - ipam
+    environment:
+      - MYSQL_ROOT_PASSWORD=${PHPIPAM_DB_ROOT_PASS}
+    volumes:
+     - /cephfs/phpipam/data:/var/lib/mysql
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+
+networks:
+  tailnet:
+    external: true
+  ipam:
