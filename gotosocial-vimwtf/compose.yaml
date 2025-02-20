@@ -5,7 +5,7 @@
 
 services:
   gotosocial:
-    image: superseriousbusiness/gotosocial:0.18.0-rc2
+    image: superseriousbusiness/gotosocial:0.18.0-rc3
     container_name: gotosocial
     restart: unless-stopped
     user: 1004:1004
